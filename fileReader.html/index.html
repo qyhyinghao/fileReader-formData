@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div id="main">
+        <div class="demo">
+          <p>
+            <label>请选择一个图像文件(请使用高级浏览器浏览：如Chrome，Firefox)：</label><br>
+            <input type="file" id="file_input" />
+          </p>
+          <div id="result"> 
+            <!-- 这里用来显示读取结果 --> 
+          </div>
+        </div>
+        <br/>
+        
+        <br/>
+      </div>
+
+      <script>
+          window.onload = function(){
+
+            var result = document.getElementById("result");
+            var input = document.getElementById("file_input");
+            
+            if(typeof FileReader === 'undefined'){
+                result.innerHTML = "抱歉，你的浏览器不支持 FileReader";
+                input.setAttribute('disabled','disabled');
+            }else{
+                input.addEventListener('change',readFile,false);
+            }
+                        
+                        
+            function readFile(){
+
+                var file = this.files[0];
+                console.log(this);
+
+                if(!/image\/\w+/.test(file.type)){
+                    alert("请确保文件为图像类型");
+                    return false;
+                }
+                var reader = new FileReader();
+
+                reader.readAsDataURL(file);
+                
+                reader.onload = function(e){
+                    //alert(3333)
+                    alert(this.result);
+                    console.log('<img src="'+this.result+'" alt=""/>');
+                    result.innerHTML = '<img src="'+this.result+'" alt=""/>';
+                }
+            }
+          }
+      </script>
+      
+</body>
+</html>

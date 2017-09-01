@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>  
+    <form name="form1" id="form1">  
+        <p>name:<input type="text" name="name" ></p>  
+        <p>gender:<input type="radio" name="gender" value="1">male <input type="radio" name="gender" value="2">female</p>  
+        <p>photo:<input type="file" name="photo" id="photo"></p>  
+        <p><input type="button" name="b1" value="submit" id="fsubmit"></p>  
+    </form>  
+    <div id="result"></div> 
+    
+    <script src="./jquery/jquery.js"></script>
+    <script>
+         $(function(){
+            $("#fsubmit").on("click",function(){
+                var data = new FormData($('#form1')[0]); 
+                console.log(data);
+                 
+                $.ajax({  
+                    url: './serve.php',  
+                    type: 'POST',  
+                    data: data,  
+                    dataType: 'JSON',  
+                    cache: false,  
+                    processData: false,  
+                    contentType: false , 
+                    success:function(ret){
+
+                        console.log(ret);
+                        
+                        if(ret['isSuccess']){  
+                            var result = '';  
+                            result += 'name=' + ret['name'] + '<br>';  
+                            result += 'gender=' + ret['gender'] + '<br>';  
+                            result += '<img src="./upload/' + ret['photo']  + '" width="200">';  
+                            $('#result').html(result);  
+                        }else{  
+                            alert('提交失敗');  
+                        } 
+
+                    }
+                });
+                return false;  
+
+            });
+           
+        });
+        /* $(function(){
+            $("#fsubmit").on("click",function(){
+                var data = new FormData($('#form1')[0]);  
+                $.ajax({  
+                    url: './serve.php',  
+                    type: 'POST',  
+                    data: data,  
+                    dataType: 'JSON',  
+                    cache: false,  
+                    processData: false,  
+                    contentType: false , 
+                }).done(function(ret){ 
+                    console.log(ret);
+                     
+                    if(ret['isSuccess']){  
+                        var result = '';  
+                        result += 'name=' + ret['name'] + '<br>';  
+                        result += 'gender=' + ret['gender'] + '<br>';  
+                        result += '<img src="' + ret['photo']  + '" width="100">';  
+                        $('#result').html(result);  
+                    }else{  
+                        alert('提交失敗');  
+                    }  
+                });  
+                return false;  
+
+            });
+           
+        }); */
+    </script>
+</body>  
+</html>
